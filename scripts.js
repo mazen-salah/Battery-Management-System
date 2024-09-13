@@ -108,16 +108,13 @@ createGauge("temperature-gauge", gaugeOptions, 100, 30);
 document.getElementById("temperature-value").textContent = "30°C";
 
 const humidityOpts = {
-  angle: 0,
+  angle: 0.15,
   lineWidth: 0.2,
   radiusScale: 1,
-  pointer: {
-    length: 0.6,
-    strokeWidth: 0.035,
-    color: "#000000",
-  },
+  pointer: { length: 0.6, strokeWidth: 0.035, color: "#B0BEC5" }, // Grey pointer color
   limitMax: false,
   limitMin: false,
+  strokeColor: "#616161",
   colorStart: "#6FADCF",
   colorStop: "#8FC0DA",
   strokeColor: "#E0E0E0",
