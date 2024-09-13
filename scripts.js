@@ -79,8 +79,17 @@ new Chart(contexts.currentHistory, lineChartOptions(
   6
 ));
 
-// Gauge options
-const gaugeOptions = {
+
+const createGauge = (elementId, options, maxValue, initialValue) => {
+  const gauge = new Gauge(document.getElementById(elementId)).setOptions(options);
+  gauge.maxValue = maxValue;
+  gauge.setMinValue(0);
+  gauge.set(initialValue);
+  return gauge;
+};
+
+//temperature-gauge
+const tempGaugeOptions = {
   angle: 0.15,
   lineWidth: 0.2,
   radiusScale: 1,
@@ -95,19 +104,11 @@ const gaugeOptions = {
   ],
 };
 
-const createGauge = (elementId, options, maxValue, initialValue) => {
-  const gauge = new Gauge(document.getElementById(elementId)).setOptions(options);
-  gauge.maxValue = maxValue;
-  gauge.setMinValue(0);
-  gauge.set(initialValue);
-  return gauge;
-};
-
-// Create gauges
-createGauge("temperature-gauge", gaugeOptions, 100, 30);
+createGauge("temperature-gauge", tempGaugeOptions, 100, 30);
 document.getElementById("temperature-value").textContent = "30°C";
 
-const humidityOpts = {
+//humidity-gauge
+const humidityGaugeOptions = {
   angle: 0.15,
   lineWidth: 0.2,
   radiusScale: 1,
@@ -122,7 +123,7 @@ const humidityOpts = {
   highDpiSupport: true,
 };
 
-createGauge("humidityMeter", humidityOpts, 100, 60);
+createGauge("humidityMeter", humidityGaugeOptions, 100, 60);
 document.getElementById("humidity-value").textContent = "60%";
 
 // Function to update AI Prediction
