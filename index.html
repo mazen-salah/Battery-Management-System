@@ -4,85 +4,107 @@
     <meta charset="UTF-8" />
     <meta name="description" content="Battery Management System Dashboard" />
     <meta name="author" content="SummationWorks" />
-    <link rel="icon" href="logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BMS Dashboard</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gaugeJS/dist/gauge.min.js"></script>
-    <link href="styles.css" rel="stylesheet" />
   </head>
   <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#"><img src="logo.png" alt="Logo" /></a>
+        <a class="navbar-brand" href="#">
+          <img src="logo.png" alt="Logo" class="logo" />
+        </a>
+        <span class="navbar-text ms-auto">BMS Dashboard</span>
       </div>
     </nav>
 
     <!-- Dashboard Container -->
-    <div class="container">
-      <h1 class="dashboard-title text-center">
+    <div class="container mt-5">
+      <h1 class="dashboard-title text-center mb-4">
         Battery Management System Dashboard
       </h1>
 
       <!-- Metrics Cards -->
-      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+      <div class="row g-4">
         <!-- Voltage Overview -->
-        <div class="col">
-          <div class="card text-center p-3">
+        <div class="col-lg-4 col-md-6">
+          <div class="card h-100 text-center p-3">
             <h4>Voltage Overview</h4>
             <div class="card-circle">
               <canvas id="voltage-overview"></canvas>
             </div>
-            <p>Theoretical: 13.0V</p>
-            <p>Practical: 12.8V</p>
-            <p>Difference: 0.2V</p>
+            <div class="mt-3">
+              <p>Theoretical: 13.0V</p>
+              <p>Practical: 12.8V</p>
+              <p>Difference: 0.2V</p>
+            </div>
           </div>
         </div>
 
         <!-- Current Overview -->
-        <div class="col">
-          <div class="card text-center p-3">
+        <div class="col-lg-4 col-md-6">
+          <div class="card h-100 text-center p-3">
             <h4>Current Overview</h4>
             <div class="card-circle">
               <canvas id="current-overview"></canvas>
             </div>
-            <p>Theoretical: 5.0A</p>
-            <p>Practical: 4.8A</p>
-            <p>Difference: 0.2A</p>
+            <div class="mt-3">
+              <p>Theoretical: 5.0A</p>
+              <p>Practical: 4.8A</p>
+              <p>Difference: 0.2A</p>
+            </div>
           </div>
         </div>
 
         <!-- Temperature Gauge -->
-        <div class="col">
-          <div class="card text-center p-3">
+        <div class="col-lg-4 col-md-6">
+          <div class="card h-100 text-center p-3">
             <h4>Temperature Overview</h4>
             <div class="temperature-card">
               <canvas id="temperature-gauge"></canvas>
-              <p>
-                Current Temperature: <span id="temperature-value">50°C</span>
+              <p class="mt-3">
+                Current Temperature: <span id="temperature-value">30°C</span>
               </p>
             </div>
           </div>
         </div>
 
+        <!-- Humidity Meter -->
+        <div class="col-lg-4 col-md-6">
+          <div class="card h-100 text-center p-3">
+            <h4>Humidity Meter</h4>
+            <canvas id="humidityMeter"></canvas>
+            <p class="mt-3">
+              Current Humidity: <span id="humidity-value">60%</span>
+            </p>
+          </div>
+        </div>
+
         <!-- Number of Batteries -->
-        <div class="col">
-          <div class="card text-center p-3">
+        <div class="col-lg-4 col-md-6">
+          <div
+            class="card h-100 text-center d-flex align-items-center justify-content-center p-3"
+          >
             <h4>Number of Batteries</h4>
-            <p>324</p>
+            <p class="mt-3">324</p>
           </div>
         </div>
 
         <!-- Expected Lifetime -->
-        <div class="col">
-          <div class="card text-center p-3">
+        <div class="col-lg-4 col-md-6">
+          <div
+            class="card h-100 text-center d-flex align-items-center justify-content-center p-3"
+          >
             <h4>Expected Lifetime</h4>
-            <p>Estimated 5 Years</p>
+            <p class="mt-3">Estimated 5 Years</p>
           </div>
         </div>
       </div>
@@ -93,20 +115,22 @@
         <p>Predicted Lifetime: 4.8 Years</p>
         <p>Battery Health: Good</p>
         <p>Recommended Action: No action required</p>
+        <p>IEC 62133-2:2017 Standards: Met</p>
       </div>
 
-      <div class="row row-cols-1 row-cols-lg-2">
+      <!-- Graphs Row -->
+      <div class="row mt-5">
         <!-- Voltage History Graph -->
-        <div class="col">
-          <div class="card p-4 graph-container mt-4 custom-card">
+        <div class="col-lg-6">
+          <div class="card p-4 graph-container">
             <h4>Voltage History</h4>
             <canvas id="voltage-history"></canvas>
           </div>
         </div>
 
         <!-- Current History Graph -->
-        <div class="col">
-          <div class="card p-4 graph-container mt-4 custom-card">
+        <div class="col-lg-6">
+          <div class="card p-4 graph-container">
             <h4>Current History</h4>
             <canvas id="current-history"></canvas>
           </div>
@@ -114,7 +138,6 @@
       </div>
     </div>
 
-    <!-- Script for Charts -->
     <script src="scripts.js"></script>
   </body>
 </html>
