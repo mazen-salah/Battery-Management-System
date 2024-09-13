@@ -125,16 +125,3 @@ const humidityGaugeOptions = {
 
 createGauge("humidityMeter", humidityGaugeOptions, 100, 60);
 document.getElementById("humidity-value").textContent = "60%";
-
-// Function to update AI Prediction
-function updateAIPrediction() {
-  // Placeholder for AI prediction logic
-  const meetsStandards = true; // Replace with actual AI prediction logic
-  const predictionText = meetsStandards
-    ? "The battery meets the IEC 62133-2:2017 standards."
-    : "The battery does not meet the IEC 62133-2:2017 standards.";
-  document.getElementById("aiPrediction").innerText = predictionText;
-}
-
-// Call the function to update AI Prediction
-updateAIPrediction();
