@@ -4,6 +4,36 @@ body {
   font-family: "Roboto", sans-serif;
 }
 
+/* The entire scrollbar */
+::-webkit-scrollbar {
+  width: 14px; /* Increased width of the scrollbar */
+}
+
+/* The track (background of the scrollbar) */
+::-webkit-scrollbar-track {
+  background: #2c2c2c; /* Slightly lighter dark background for the track */
+  border-radius: 10px; /* Rounded corners for a smoother look */
+}
+
+/* The handle (scroll thumb) */
+::-webkit-scrollbar-thumb {
+  background: #4caf50; /* Green color for the scroll thumb */
+  border-radius: 10px;
+  border: 3px solid #2c2c2c; /* Creates space between the thumb and track */
+}
+
+/* The handle when hovered */
+::-webkit-scrollbar-thumb:hover {
+  background: #81c784; /* Lighter green color on hover */
+}
+
+/* Optional: For smaller viewport devices */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 12px; /* Increased width for smaller devices as well */
+  }
+}
+
 .navbar {
   background-color: #1f1f1f;
 }
