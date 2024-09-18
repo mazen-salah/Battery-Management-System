@@ -22,8 +22,8 @@ const createGauge = (elementId, options, maxValue, initialValue) => {
     ],
   };
   
-  createGauge("temperature-gauge", tempGaugeOptions, 100, 30);
-  document.getElementById("temperature-value").textContent = "30°C";
+  createGauge("temperature-gauge", tempGaugeOptions, 100, 0);
+  document.getElementById("temperature-value").textContent = "0°C";
   
   // Humidity gauge
   const humidityGaugeOptions = {
@@ -41,6 +41,6 @@ const createGauge = (elementId, options, maxValue, initialValue) => {
     highDpiSupport: true,
   };
   
-  createGauge("humidityMeter", humidityGaugeOptions, 100, 60);
-  document.getElementById("humidity-value").textContent = "60%";
+  createGauge("humidityMeter", humidityGaugeOptions, 100, 0);
+  document.getElementById("humidity-value").textContent = "0%";
   

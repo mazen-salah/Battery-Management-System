@@ -11,6 +11,8 @@ ESP8266WebServer server(80);
 // Global variables for simulated sensor data
 float voltage = 0;
 float current = 0;
+float temperature = 0; // Added for temperature
+float humidity = 0;    // Added for humidity
 
 void setup() {
   // Start serial communication
@@ -45,6 +47,8 @@ void loop() {
   // Generate simulated data every loop
   voltage = random(300, 420) / 100.0; // Simulate voltage between 3.00V to 4.20V
   current = random(100, 500) / 100.0; // Simulate current between 1.00A to 5.00A
+  temperature = random(150, 350) / 10.0; // Simulate temperature between 15.0°C to 35.0°C
+  humidity = random(200, 800) / 10.0;    // Simulate humidity between 20.0% to 80.0%
 
   delay(1000); // Delay to simulate sensor refresh rate
 }
@@ -56,6 +60,8 @@ void handleDashboard() {
   html += "<p><a href='/data'>Get Sensor Data</a></p>";
   html += "<p>Voltage: " + String(voltage) + " V</p>";
   html += "<p>Current: " + String(current) + " A</p>";
+  html += "<p>Temperature: " + String(temperature) + " °C</p>";
+  html += "<p>Humidity: " + String(humidity) + " %</p>";
   html += "</body></html>";
 
   server.send(200, "text/html", html);
@@ -64,7 +70,10 @@ void handleDashboard() {
 // Handle the sensor data endpoint
 void handleSensorData() {
   // Simulate sensor data
-  String json = "{\"voltage\": " + String(voltage) + ", \"current\": " + String(current) + "}";
+  String json = "{\"voltage\": " + String(voltage) + 
+                 ", \"current\": " + String(current) + 
+                 ", \"temperature\": " + String(temperature) + 
+                 ", \"humidity\": " + String(humidity) + "}";
 
   // Set CORS headers
   server.sendHeader("Access-Control-Allow-Origin", "*");
