@@ -45,8 +45,8 @@ void loop() {
   server.handleClient();
 
   // Generate simulated data every loop
-  voltage = random(300, 420) / 100.0; // Simulate voltage between 3.00V to 4.20V
-  current = random(100, 500) / 100.0; // Simulate current between 1.00A to 5.00A
+  voltage = random(300, 422) / 100.0; // Simulate voltage between 3.00V to 4.22V
+  current = random(10, 200) / 10.0; // Simulate current between 1.0A to 20.0A
   temperature = random(150, 350) / 10.0; // Simulate temperature between 15.0°C to 35.0°C
   humidity = random(200, 800) / 10.0;    // Simulate humidity between 20.0% to 80.0%
 
@@ -74,7 +74,7 @@ void handleSensorData() {
                  ", \"current\": " + String(current) + 
                  ", \"temperature\": " + String(temperature) + 
                  ", \"humidity\": " + String(humidity) + "}";
-
+  
   // Set CORS headers
   server.sendHeader("Access-Control-Allow-Origin", "*");
   server.sendHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
