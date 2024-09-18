@@ -7,18 +7,19 @@ const contexts = {
 };
 
 // Global arrays to store history
-let voltageHistoryData = [];
-let currentHistoryData = [];
-let voltageHistoryLabels = [];
-let currentHistoryLabels = [];
+const historyData = {
+  voltage: [],
+  current: [],
+  voltageLabels: [],
+  currentLabels: [],
+};
 const maxHistoryLength = 10; // Maximum length of history
 
 // Function to fetch sensor data from the endpoint
 async function fetchSensorData() {
   try {
     const response = await fetch("http://192.168.1.4/data");
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.error("Error fetching sensor data:", error);
     return null;
@@ -27,12 +28,8 @@ async function fetchSensorData() {
 
 // Function to calculate and display the difference between theoretical and practical values
 function calculateDifferences(voltage, current) {
-  const theoreticalVoltage = parseFloat(
-    document.getElementById("theoretical-voltage").value
-  );
-  const theoreticalCurrent = parseFloat(
-    document.getElementById("theoretical-current").value
-  );
+  const theoreticalVoltage = parseFloat(document.getElementById("theoretical-voltage").value);
+  const theoreticalCurrent = parseFloat(document.getElementById("theoretical-current").value);
 
   document.getElementById("practical-voltage").textContent = `${voltage}V`;
   document.getElementById("practical-current").textContent = `${current}A`;
@@ -40,51 +37,28 @@ function calculateDifferences(voltage, current) {
   const voltageDifference = Math.abs(theoreticalVoltage - voltage).toFixed(2);
   const currentDifference = Math.abs(theoreticalCurrent - current).toFixed(2);
 
-  document.getElementById(
-    "voltage-difference"
-  ).textContent = `${voltageDifference}V`;
-  document.getElementById(
-    "current-difference"
-  ).textContent = `${currentDifference}A`;
+  document.getElementById("voltage-difference").textContent = `${voltageDifference}V`;
+  document.getElementById("current-difference").textContent = `${currentDifference}A`;
 }
 
 // Function to update the charts
 function updateCharts(voltage, current) {
-  const theoreticalVoltage = parseFloat(
-    document.getElementById("theoretical-voltage").value
-  );
-  const theoreticalCurrent = parseFloat(
-    document.getElementById("theoretical-current").value
-  );
+  const theoreticalVoltage = parseFloat(document.getElementById("theoretical-voltage").value);
+  const theoreticalCurrent = parseFloat(document.getElementById("theoretical-current").value);
 
-  voltageOverviewChart.data.datasets[0].data = [
-    voltage,
-    theoreticalVoltage,
-    theoreticalVoltage - voltage,
-  ];
-  voltageOverviewChart.update();
+  updateCircularChart(voltageOverviewChart, [voltage, theoreticalVoltage, theoreticalVoltage - voltage]);
+  updateCircularChart(currentOverviewChart, [current, theoreticalCurrent, theoreticalCurrent - current]);
 
-  currentOverviewChart.data.datasets[0].data = [
-    current,
-    theoreticalCurrent,
-    theoreticalCurrent - current,
-  ];
-  currentOverviewChart.update();
-
-  updateHistoryChart(
-    voltageHistoryChart,
-    voltageHistoryData,
-    voltageHistoryLabels,
-    voltage
-  );
-  updateHistoryChart(
-    currentHistoryChart,
-    currentHistoryData,
-    currentHistoryLabels,
-    current
-  );
+  updateHistoryChart(voltageHistoryChart, historyData.voltage, historyData.voltageLabels, voltage);
+  updateHistoryChart(currentHistoryChart, historyData.current, historyData.currentLabels, current);
 
   calculateDifferences(voltage, current);
+}
+
+// Function to update circular charts
+function updateCircularChart(chart, data) {
+  chart.data.datasets[0].data = data;
+  chart.update();
 }
 
 // Function to update history charts
@@ -120,14 +94,7 @@ const circularChartOptions = (data) => ({
   options: { cutout: "70%" },
 });
 
-const lineChartOptions = (
-  label,
-  data,
-  borderColor,
-  backgroundColor,
-  yMin,
-  yMax
-) => ({
+const lineChartOptions = (label, data, borderColor, backgroundColor, yMin, yMax) => ({
   type: "line",
   data: {
     labels: [],
@@ -183,7 +150,7 @@ const voltageHistoryChart = new Chart(
   contexts.voltageHistory,
   lineChartOptions(
     "Voltage (V)",
-    voltageHistoryData,
+    historyData.voltage,
     "#4caf50",
     "rgba(76, 175, 80, 0.2)",
     0,
@@ -195,7 +162,7 @@ const currentHistoryChart = new Chart(
   contexts.currentHistory,
   lineChartOptions(
     "Current (A)",
-    currentHistoryData,
+    historyData.current,
     "#f44336",
     "rgba(244, 67, 54, 0.2)",
     0,
@@ -203,6 +170,7 @@ const currentHistoryChart = new Chart(
   )
 );
 
+// Initial data fetch and chart update
 fetchSensorData().then((sensorData) => {
   if (sensorData) {
     updateCharts(sensorData.voltage, sensorData.current);
