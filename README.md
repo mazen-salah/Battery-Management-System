@@ -1,19 +1,19 @@
-# ESP8266 Sensor Dashboard
+# Battery Management System Dashboard
 
-This repository contains code for a simple web-based dashboard to display and monitor simulated sensor data using an ESP8266 microcontroller. The data includes voltage, current, temperature, and humidity, which are simulated to mimic a real-world scenario.
+This repository contains code for a web-based dashboard to display and monitor simulated sensor data using an ESP8266 microcontroller. The data includes voltage, current, temperature, and humidity, simulating a real-world scenario.
 
 ## Project Overview
 
-The project involves an ESP8266 microcontroller connected to a Wi-Fi network. It hosts a web server that serves a dashboard displaying simulated sensor readings. The web server provides two main endpoints:
+The project uses an ESP8266 microcontroller connected to a Wi-Fi network. It hosts a web server that serves a dashboard displaying simulated sensor readings. The web server provides two main endpoints:
 
 - `/` - The main dashboard page.
 - `/data` - A JSON endpoint that provides the latest sensor data.
 
 ## Features
 
-- **Web Dashboard**: A simple HTML page displaying simulated sensor data.
-- **JSON Data Endpoint**: Provides sensor data in JSON format for integration with other applications.
-- **Simulated Sensor Data**: Voltage, current, temperature, and humidity are simulated to mimic a real-world sensor setup.
+- **Web Dashboard**: Displays simulated sensor data on a simple HTML page.
+- **JSON Data Endpoint**: Supplies sensor data in JSON format for integration with other applications.
+- **Simulated Sensor Data**: Simulates voltage, current, temperature, and humidity to mimic a real-world sensor setup.
 
 ## Hardware Required
 
@@ -39,7 +39,7 @@ The project involves an ESP8266 microcontroller connected to a Wi-Fi network. It
 
 3. **Install Dependencies**
 
-   Ensure that the ESP8266 board package is installed in the Arduino IDE. Go to `Tools > Board > Board Manager`, search for "ESP8266", and install the package if not already installed.
+   Ensure the ESP8266 board package is installed in the Arduino IDE. Go to `Tools > Board > Board Manager`, search for "ESP8266", and install the package if not already installed.
 
 4. **Update Wi-Fi Credentials**
 
@@ -75,6 +75,7 @@ The project involves an ESP8266 microcontroller connected to a Wi-Fi network. It
 ### Dashboard HTML
 
 The dashboard displays:
+
 - Voltage
 - Current
 - Temperature
