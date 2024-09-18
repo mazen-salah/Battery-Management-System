@@ -51,7 +51,8 @@
                   id="theoretical-voltage"
                   value="3.7"
                   step="0.1"
-                /> V
+                />
+                V
               </p>
               <p>Practical: <span id="practical-voltage">0V</span></p>
               <p>Difference: <span id="voltage-difference">0V</span></p>
@@ -74,7 +75,8 @@
                   id="theoretical-current"
                   value="3.7"
                   step="0.1"
-                /> A
+                />
+                A
               </p>
               <p>Practical: <span id="practical-current">0A</span></p>
               <p>Difference: <span id="current-difference">0A</span></p>
@@ -112,7 +114,12 @@
             class="card h-100 text-center d-flex align-items-center justify-content-center p-3"
           >
             <h4>Number of Batteries</h4>
-            <p class="mt-3">324</p>
+            <input
+              type="number"
+              id="number-of-batteries"
+              value="1"
+              min="1"
+            />
           </div>
         </div>
 

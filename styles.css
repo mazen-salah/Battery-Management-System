@@ -115,6 +115,7 @@ input[type="number"] {
   border-radius: 4px; /* Slightly rounded corners */
   padding: 0.5rem; /* Padding inside input */
   width: 40px; /* Set a fixed width for consistency */
+  text-align: center; /* Center the text */
 }
 
 input[type="number"]::-webkit-inner-spin-button,
