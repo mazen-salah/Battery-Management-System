@@ -154,7 +154,7 @@ const voltageHistoryChart = new Chart(
     "#4caf50",
     "rgba(76, 175, 80, 0.2)",
     0,
-    14
+    4
   )
 );
 
@@ -166,7 +166,7 @@ const currentHistoryChart = new Chart(
     "#f44336",
     "rgba(244, 67, 54, 0.2)",
     0,
-    6
+    4
   )
 );
 
