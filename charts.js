@@ -72,6 +72,7 @@ async function refreshData() {
   const sensorData = await fetchSensorData();
   if (sensorData) {
     updateCharts(sensorData.voltage, sensorData.current);
+    updateGauges(sensorData.temperature, sensorData.humidity);
   }
 }
 
