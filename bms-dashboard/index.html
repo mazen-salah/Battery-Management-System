@@ -46,7 +46,14 @@
             <div class="mt-3">
               <p>
                 Theoretical:
-                <input type="number" id="theoretical-voltage" value="3.7" /> V
+                <input
+                  type="number"
+                  id="theoretical-voltage"
+                  value="3.7"
+                  title="Enter the theoretical voltage"
+                  placeholder="Theoretical Voltage"
+                />
+                V
               </p>
               <p>Practical: <span id="practical-voltage">0V</span></p>
               <p>Difference: <span id="voltage-difference">0V</span></p>
@@ -68,7 +75,8 @@
                   type="number"
                   id="theoretical-current"
                   value="3.7"
-                  step="0.1"
+                  title="Enter the theoretical current"
+                  placeholder="Theoretical Current"
                 />
                 A
               </p>
@@ -108,7 +116,17 @@
             class="card h-100 text-center d-flex align-items-center justify-content-center p-3"
           >
             <h4>Number of Batteries</h4>
-            <input type="number" id="number-of-batteries" value="1" min="1" />
+            <label for="number-of-batteries" class="form-label"
+              >Number of Batteries</label
+            >
+            <input
+              type="number"
+              id="number-of-batteries"
+              value="1"
+              min="1"
+              title="Enter the number of batteries"
+              placeholder="Number of Batteries"
+            />
           </div>
         </div>
 
@@ -118,7 +136,15 @@
             class="card h-100 text-center d-flex align-items-center justify-content-center p-3"
           >
             <h4>Expected Lifetime</h4>
-            <p class="mt-3">Estimated 5 Years</p>
+            <label for="expected-lifetime" class="form-label">Expected Lifetime</label>
+            <input
+              type="number"
+              id="expected-lifetime"
+              value="5"
+              min="1"
+              title="Enter the expected lifetime in years"
+              placeholder="Expected Lifetime"
+            />
           </div>
         </div>
       </div>
