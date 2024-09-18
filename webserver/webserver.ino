@@ -1,5 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
+#include <Wire.h>
+#include <Adafruit_AHTX0.h>
 
 // Wi-Fi credentials
 const char* ssid = "Your_SSID";
@@ -8,15 +10,39 @@ const char* password = "Your_PASSWORD";
 // Web server on port 80
 ESP8266WebServer server(80);
 
-// Global variables for simulated sensor data
+// Constants for voltage and current measurement
+const int adcPin = A0;                   // ADC pin for voltage measurement
+// R1 (10kΩ) is connected between the input voltage (up to 5V) and the A0 pin.
+const float R1 = 10000.0;                // Resistor R1 value (10kΩ) for voltage divider
+// R2 (6.8kΩ) is connected between the A0 pin and GND.
+const float R2 = 6800.0;                 // Resistor R2 value (6.8kΩ) for voltage divider
+const float vRef = 3.3;                  // Reference voltage for ESP8266 (3.3V)
+const float currentSenseResistor = 0.1;  // Known resistor value for current sensing (in Ohms)
+
+// Sensor object for AHT21B
+// VCC to 3.3V.
+// GND to GND.
+// SDA to D2GPIO 4).
+// SCL to D1 (or GPIO 5).
+Adafruit_AHTX0 aht;
+
+// Global variables for sensor data
 float voltage = 0;
 float current = 0;
-float temperature = 0; // Added for temperature
-float humidity = 0;    // Added for humidity
+float temperature = 0;
+float humidity = 0;
 
 void setup() {
   // Start serial communication
   Serial.begin(9600);
+
+  // Initialize I2C communication and AHT21B sensor
+  if (!aht.begin()) {
+    Serial.println("Failed to initialize AHT21B sensor!");
+    while (1)
+      ;
+  }
+  Serial.println("AHT21B sensor initialized.");
 
   // Connect to Wi-Fi
   WiFi.begin(ssid, password);
@@ -25,13 +51,13 @@ void setup() {
     delay(500);
     Serial.print(".");
   }
-  
+
   // Wi-Fi connected, print the local IP
   Serial.println("");
   Serial.println("WiFi connected!");
   Serial.print("Local IP: ");
   Serial.println(WiFi.localIP());  // Print the local IP address
-  
+
   // Define web server routes
   server.on("/", handleDashboard);
   server.on("/data", handleSensorData);
@@ -44,19 +70,39 @@ void loop() {
   // Handle incoming client requests
   server.handleClient();
 
-  // Generate simulated data every loop
-  voltage = random(300, 422) / 100.0; // Simulate voltage between 3.00V to 4.22V
-  current = random(10, 200) / 10.0; // Simulate current between 1.0A to 20.0A
-  temperature = random(150, 350) / 10.0; // Simulate temperature between 15.0°C to 35.0°C
-  humidity = random(200, 800) / 10.0;    // Simulate humidity between 20.0% to 80.0%
+  // Read the ADC value and convert it to actual voltage
+  int adcValue = analogRead(adcPin);
+  float adcVoltage = (adcValue / 1023.0) * vRef;
 
-  delay(1000); // Delay to simulate sensor refresh rate
+  // Calculate the input voltage (scaled to 5V max using the voltage divider)
+  voltage = adcVoltage / (R2 / (R1 + R2));
+
+  // Calculate the current using Ohm's Law: I = V / R
+  current = voltage / currentSenseResistor;
+
+  // Get temperature and humidity from the AHT21B sensor
+  sensors_event_t humidityEvent, tempEvent;
+  aht.getEvent(&humidityEvent, &tempEvent);  // Populate events with data
+
+  temperature = tempEvent.temperature;
+  humidity = humidityEvent.relative_humidity;
+
+  // Print sensor data for debugging
+  Serial.print("Voltage: ");
+  Serial.print(voltage);
+  Serial.print(" V, Current: ");
+  Serial.print(current);
+  Serial.print(" A, Temperature: ");
+  Serial.print(temperature);
+  Serial.print(" °C, Humidity: ");
+  Serial.print(humidity);
+  Serial.println(" %");
 }
 
 // Handle the root (dashboard) endpoint
 void handleDashboard() {
   String html = "<html><body>";
-  html += "<h1>Sensor Dashboard (Demo Data)</h1>";
+  html += "<h1>Sensor Dashboard (Real Data)</h1>";
   html += "<p><a href='/data'>Get Sensor Data</a></p>";
   html += "<p>Voltage: " + String(voltage) + " V</p>";
   html += "<p>Current: " + String(current) + " A</p>";
@@ -69,17 +115,14 @@ void handleDashboard() {
 
 // Handle the sensor data endpoint
 void handleSensorData() {
-  // Simulate sensor data
-  String json = "{\"voltage\": " + String(voltage) + 
-                 ", \"current\": " + String(current) + 
-                 ", \"temperature\": " + String(temperature) + 
-                 ", \"humidity\": " + String(humidity) + "}";
-  
+  // Create JSON data with the current sensor readings
+  String json = "{\"voltage\": " + String(voltage) + ", \"current\": " + String(current) + ", \"temperature\": " + String(temperature) + ", \"humidity\": " + String(humidity) + "}";
+
   // Set CORS headers
   server.sendHeader("Access-Control-Allow-Origin", "*");
   server.sendHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   server.sendHeader("Access-Control-Allow-Headers", "Content-Type");
-  
+
   // Send JSON response with the sensor data
   server.send(200, "application/json", json);
 }
