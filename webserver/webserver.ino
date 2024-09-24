@@ -1,7 +1,6 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
-#include <Wire.h>
-#include <Adafruit_AHTX0.h>
+#include <DHT.h>
 
 // Wi-Fi credentials
 const char* ssid = "Your_SSID";
@@ -19,12 +18,10 @@ const float R2 = 6800.0;                 // Resistor R2 value (6.8kΩ) for volta
 const float vRef = 3.3;                  // Reference voltage for ESP8266 (3.3V)
 const float currentSenseResistor = 0.1;  // Known resistor value for current sensing (in Ohms)
 
-// Sensor object for AHT21B
-// VCC to 3.3V.
-// GND to GND.
-// SDA to D2GPIO 4).
-// SCL to D1 (or GPIO 5).
-Adafruit_AHTX0 aht;
+// DHT11 sensor setup
+#define DHTPIN D2      // Pin connected to DHT11 data pin
+#define DHTTYPE DHT11  // DHT11 sensor type
+DHT dht(DHTPIN, DHTTYPE);
 
 // Global variables for sensor data
 float voltage = 0;
@@ -36,13 +33,9 @@ void setup() {
   // Start serial communication
   Serial.begin(9600);
 
-  // Initialize I2C communication and AHT21B sensor
-  if (!aht.begin()) {
-    Serial.println("Failed to initialize AHT21B sensor!");
-    while (1)
-      ;
-  }
-  Serial.println("AHT21B sensor initialized.");
+  // Initialize DHT11 sensor
+  dht.begin();
+  Serial.println("DHT11 sensor initialized.");
 
   // Connect to Wi-Fi
   WiFi.begin(ssid, password);
@@ -80,12 +73,15 @@ void loop() {
   // Calculate the current using Ohm's Law: I = V / R
   current = voltage / currentSenseResistor;
 
-  // Get temperature and humidity from the AHT21B sensor
-  sensors_event_t humidityEvent, tempEvent;
-  aht.getEvent(&humidityEvent, &tempEvent);  // Populate events with data
+  // Get temperature and humidity from the DHT11 sensor
+  temperature = dht.readTemperature();
+  humidity = dht.readHumidity();
 
-  temperature = tempEvent.temperature;
-  humidity = humidityEvent.relative_humidity;
+  // Check if the DHT11 sensor readings are valid
+  if (isnan(temperature) || isnan(humidity)) {
+    Serial.println("Failed to read from DHT11 sensor!");
+    return;
+  }
 
   // Print sensor data for debugging
   Serial.print("Voltage: ");
