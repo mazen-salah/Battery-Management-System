@@ -10,16 +10,16 @@ const char* password = "Your_PASSWORD";
 ESP8266WebServer server(80);
 
 // Constants for voltage and current measurement
-const int adcPin = A0;                   // ADC pin for voltage measurement
+const int adcPin = A0;  // ADC pin for voltage measurement
 // R1 (10kΩ) is connected between the input voltage (up to 5V) and the A0 pin.
-const float R1 = 10000.0;                // Resistor R1 value (10kΩ) for voltage divider
-// R2 (6.8kΩ) is connected between the A0 pin and GND.
-const float R2 = 6800.0;                 // Resistor R2 value (6.8kΩ) for voltage divider
+const float R1 = 10000.0;  // Resistor R1 value (10kΩ) for voltage divider
+// R2 (4.8kΩ) is connected between the A0 pin and GND.
+const float R2 = 4800.0;                 // Resistor R2 value (4.8kΩ) for voltage divider
 const float vRef = 3.3;                  // Reference voltage for ESP8266 (3.3V)
-const float currentSenseResistor = 0.1;  // Known resistor value for current sensing (in Ohms)
+const float currentSenseResistor = 100;  // Known resistor value for current sensing (in Ohms)
 
 // DHT11 sensor setup
-#define DHTPIN D2      // Pin connected to DHT11 data pin
+#define DHTPIN D4      // Pin connected to DHT11 data pin
 #define DHTTYPE DHT11  // DHT11 sensor type
 DHT dht(DHTPIN, DHTTYPE);
 
@@ -68,14 +68,14 @@ void loop() {
   float adcVoltage = (adcValue / 1023.0) * vRef;
 
   // Calculate the input voltage (scaled to 5V max using the voltage divider)
-  voltage = adcVoltage / (R2 / (R1 + R2));
+  voltage = adcVoltage / (R2 / (R1 + R2)) *0.88;
 
   // Calculate the current using Ohm's Law: I = V / R
   current = voltage / currentSenseResistor;
 
   // Get temperature and humidity from the DHT11 sensor
-  temperature = dht.readTemperature();
-  humidity = dht.readHumidity();
+  temperature = dht.readTemperature() + 24;
+  humidity = dht.readHumidity() + 20;
 
   // Check if the DHT11 sensor readings are valid
   if (isnan(temperature) || isnan(humidity)) {

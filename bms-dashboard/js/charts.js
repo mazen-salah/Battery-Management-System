@@ -18,7 +18,7 @@ const maxHistoryLength = 10; // Maximum length of history
 // Function to fetch sensor data from the endpoint
 async function fetchSensorData() {
   try {
-    const response = await fetch("http://192.168.1.4/data");
+    const response = await fetch("http://192.168.1.9/data");
     return await response.json();
   } catch (error) {
     console.error("Error fetching sensor data:", error);
